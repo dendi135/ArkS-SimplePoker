@@ -17,6 +17,7 @@ public class Table {
 	private long rate = 0;
 	private int increaseCount = 0;
 	private int numOfMoves = 0;
+	private int winMoney = 0;
 
 	public Table(int money) {
 		this.money = money;
@@ -32,6 +33,7 @@ public class Table {
 
 	public void showMyMoney() {
 		System.out.println("You have: " + money + "$");
+		System.out.println(("Current bet: " + getRate()) + "$");
 	}
 
 	public int getNumOfMoves() {
@@ -43,6 +45,7 @@ public class Table {
 		System.out.println("Make your bet: ");
 		try {
 			myRate = Integer.parseInt(br.readLine());
+			winMoney += myRate;
 		} catch (NumberFormatException e) {
 			System.out.println("Bet must be a number!!!");
 			setRate(br);
@@ -54,8 +57,8 @@ public class Table {
 			if (money > 0 && money >= myRate) {
 				rate += myRate;
 				money -= myRate;
-				System.out.println("Your money: " + getMoney());
-				System.out.println("Current bet: " + getRate());
+				System.out.println("Your money: " + getMoney() + "$");
+				System.out.println("Current bet: " + getRate() + "$");
 				passOrCheck(br);
 			} else {
 				System.out.println("You don't have money!");
@@ -68,7 +71,7 @@ public class Table {
 	}
 
 	public long getRate() {
-		return rate;
+		return rate + winMoney;
 	}
 
 	public void passOrCheck(BufferedReader br) {
@@ -82,7 +85,7 @@ public class Table {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (pass.equals("/open") && numOfMoves >= 0) {
+		if (pass.equals("/open") && numOfMoves >= 4) {
 			openCards();
 			System.exit(1);
 		} else if (pass.equals("/show")) {
@@ -112,8 +115,8 @@ public class Table {
 				System.out.println("Current bet: " + getRate());
 			}
 		} else {
-			System.out.println("You must do 4 moves at least!");
-			System.out.println("Unknown command! Please choose one of the following:");
+			System.out.println("You must do 4 moves at least! " + "There are still " + (4 - numOfMoves) + " moves left.");
+			System.out.println("Please choose one of the following:");
 			passOrCheck(br);
 		}
 	}
@@ -130,7 +133,7 @@ public class Table {
 			passOrCheck(br);
 		} else if (action == 2) {
 			System.out.println("Your opponent gives up!");
-			money += rate + new Random().nextInt(500);
+			money += rate + winMoney + new Random().nextInt(500);
 			System.out.println("Congratulations, you won!");
 			System.out.println("You have: " + money + "$");
 			System.exit(1);
@@ -145,7 +148,7 @@ public class Table {
 			System.out.println("You have: " + money + "$");
 		} else if(myHand.getHighCard() > aiHand.getHighCard()) {
 			System.out.println("YOU WIN! (Highest card)");
-			money += rate + new Random().nextInt(500);
+			money += rate + winMoney + new Random().nextInt(500);
 			System.out.println("You have: " + money + "$");
 		} else {
 			System.out.println("YOU LOSE!");
