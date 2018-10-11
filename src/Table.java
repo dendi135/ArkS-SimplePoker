@@ -102,8 +102,7 @@ public class Table {
 		} else if (pass.equals("/increase")) {
 			if (increaseCount != 0) {
 				increaseCount = 0;
-				System.out.println(
-						"Please send '/increase' again to increase your bet if your opponent has not surrendered yet");
+				System.out.println("Please send '/increase' again to increase your bet if your opponent has not surrendered yet");
 				actionAI();
 			} else {
 				increaseCount++;
